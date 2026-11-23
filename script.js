@@ -1,7 +1,7 @@
 /*
   Site behavior: mobile menu, skill filters, project grids, project page, contact form.
-  Project content and skills come from data/projects.js. Nothing here needs editing
-  to add a project or a skill.
+  Project content, images, and skills come from data/projects.js. Nothing here needs
+  editing to add a project or a skill.
 */
 
 // Form service endpoint. Leave empty until a form service is chosen. The service
@@ -37,6 +37,15 @@ function el(tag, className, text) {
   return node;
 }
 
+function imageEl(src, alt) {
+  const img = el("img");
+  img.src = src;
+  img.alt = alt || "";
+  img.loading = "lazy";
+  img.decoding = "async";
+  return img;
+}
+
 // Featured projects first, then the rest, keeping the order in the data file.
 function orderedProjects() {
   return [
@@ -64,6 +73,10 @@ function buildCard(p, { showTags }) {
   link.href = `project.html?id=${encodeURIComponent(p.id)}`;
 
   const media = el("div", "card-media");
+  if (p.cover) {
+    media.classList.add("has-image");
+    media.append(imageEl(p.cover, p.title ? `${p.title} cover` : ""));
+  }
   const caption = el("div");
   caption.append(el("div", "card-title", p.title || "Name"));
   caption.append(el("div", "card-summary", p.summary || ""));
@@ -124,18 +137,37 @@ function renderWorksGrid() {
   orderedProjects().forEach((p) => grid.append(buildCard(p, { showTags: false })));
 }
 
+// Builds one section of project text: optional heading, paragraphs, optional list.
+function buildBodySection(section) {
+  const wrap = el("section", "project-section");
+  if (section.heading) wrap.append(el("h2", "", section.heading));
+  (section.paragraphs || []).forEach((text) => wrap.append(el("p", "", text)));
+  if (section.list && section.list.length) {
+    const ul = el("ul", "project-list");
+    section.list.forEach((item) => ul.append(el("li", "", item)));
+    wrap.append(ul);
+  }
+  return wrap;
+}
+
 function renderProjectPage() {
   const id = new URLSearchParams(window.location.search).get("id");
   const project = PROJECTS.find((p) => p.id === id);
   const title = document.getElementById("project-title");
   const summary = document.getElementById("project-summary");
   const tags = document.getElementById("project-tags");
+  const cover = document.getElementById("project-cover");
+  const body = document.getElementById("project-body");
+  const gallery = document.getElementById("project-gallery");
   if (!title) return;
 
   if (!project) {
     title.textContent = "Project not found";
     summary.textContent = "This project may have moved. Return to all works to see what is available.";
     tags.replaceChildren();
+    if (cover) cover.remove();
+    if (body) body.replaceChildren();
+    if (gallery) gallery.remove();
     const back = el("a", "", "All works");
     back.href = "works.html";
     summary.append(" ", back);
@@ -147,6 +179,35 @@ function renderProjectPage() {
   summary.textContent = project.summary || "";
   tags.replaceChildren();
   (project.skills || []).forEach((s) => tags.append(el("span", "", s)));
+
+  if (cover) {
+    cover.replaceChildren();
+    if (project.cover) {
+      cover.append(imageEl(project.cover, project.title ? `${project.title} cover` : ""));
+    } else {
+      cover.setAttribute("aria-label", "Project cover (none yet)");
+      cover.hidden = true;
+    }
+  }
+
+  if (body) {
+    body.replaceChildren();
+    (project.body || []).forEach((section) => body.append(buildBodySection(section)));
+  }
+
+  if (gallery) {
+    gallery.replaceChildren();
+    const images = project.gallery || [];
+    if (images.length === 0) {
+      gallery.hidden = true;
+    } else {
+      images.forEach((src) => {
+        const tile = el("div", "tile");
+        tile.append(imageEl(src, project.title ? `${project.title} image` : ""));
+        gallery.append(tile);
+      });
+    }
+  }
 }
 
 function setupMobileMenu() {
