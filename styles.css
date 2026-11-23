@@ -67,6 +67,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 700; margin: 0; }
   color: var(--text); border-radius: 999px; padding: 6px 16px; font: inherit; cursor: pointer;
 }
 
+/* Mobile menu: hidden by default. It only appears below 800px (see media query). */
+.mobile-menu { display: none; }
+
 /* Main surface: the rounded panel below the header */
 .panel {
   background: var(--bg);
