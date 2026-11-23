@@ -5,16 +5,17 @@
   - skills: names of skills this project uses. Any skill name that appears here
     is added to the skill filter on the home page automatically. Skill names are
     matched exactly, so keep the same spelling and capitalization each time.
-  - Every title, summary, and skill below is a placeholder until Jamie supplies
-    real content.
+  - Skill names come from Jamie's spreadsheet.
+  - Summaries are placeholders ("2025") until Jamie supplies real text.
+    Slots 4 to 11 are unused placeholders.
 */
 window.PORTFOLIO_PROJECTS = [
-  { id: "project-1", title: "Name", summary: "Description or year", featured: true,
-    skills: ["Soft goods", "Hard goods", "User research"] },
-  { id: "project-2", title: "Name", summary: "Description or year", featured: true,
-    skills: ["CAD", "Rendering", "Adobe Suite"] },
-  { id: "project-3", title: "Name", summary: "Description or year", featured: true,
-    skills: ["Figma", "Collaboration", "AI Tools"] },
+  { id: "divine-feminine", title: "Divine Feminine", summary: "2025", featured: true,
+    skills: ["CAD", "3D rendering", "Figma", "AI Tools", "user research", "collaboration", "prototyping", "industrial design"] },
+  { id: "gathered-matter", title: "Gathered Matter", summary: "2025", featured: true,
+    skills: ["Adobe Creative Suite", "apparel construction", "prototyping", "sewing"] },
+  { id: "raydiant", title: "Raydiant", summary: "2025", featured: true,
+    skills: ["CAD", "3D rendering", "Figma", "AI Tools", "user research", "prototyping", "metal-smithing"] },
   { id: "project-4", title: "Name", summary: "Description or year", featured: false, skills: [] },
   { id: "project-5", title: "Name", summary: "Description or year", featured: false, skills: [] },
   { id: "project-6", title: "Name", summary: "Description or year", featured: false, skills: [] },
